@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
 
+import './App.css';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 function App() {
+  const [name, setName]= useState("");
+  const [age, setAge]= useState();
+  const handleChange =(event)=>{
+setName(event.target.value);
+  }
+  const generate = ()=>{
+    axios.get(`https://api.agify.io/?name=${name}`).then((res)=>{
+      console.log(res.data.age);
+      if(res.data.age=== null){
+        setAge("No Age for this name")
+      }
+      else{
+     setAge(res.data.age);
+      }
+  })
+  }
+  useEffect( ()=>{
+  //   axios.get(`https://api.agify.io/?name=${name}`).then((res)=>{
+  //     console.log(res.data.age);
+  // })
+  },[]);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <div className='App'>
+     <input onChange={handleChange} type='text' />
+      <button onClick={generate}> Generate</button>
+      <p>{name}</p>
+      <p>{age}</p>
     </div>
   );
 }
